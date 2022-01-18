@@ -18,15 +18,9 @@ pipeline{
         }
         stage("deploy-dev"){
             steps{
-                sshagent(['Tomcat-New34']) {
-                sh """
-                       mv target/myweb.war  /home/ec2-user/apache-tomcat-9.0.56/webapps/
-                    
-                       /home/ec2-user/apache-tomcat-9.0.56/bin/shutdown.sh
-                    
-                       /home/ec2-user/apache-tomcat-9.0.56/bin/startup.sh
-                
-                """
+               deploy adapters: [tomcat9(credentialsId: '116c773b-f827-4ea0-84a5-756bee68171d', path: '', url: 'http://65.0.177.47:8090/')], contextPath: 'myweb', war: 'target/*war'
+               
+   
             }
             
             }
