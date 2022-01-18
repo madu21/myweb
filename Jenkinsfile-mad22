@@ -5,7 +5,8 @@ pipeline{
         PATH = "/opt/maven3/bin:$PATH"
     }
     stages{
-        stage("Git Checkout"){
+        
+		stage("Git Checkout"){
             steps{
                 git credentialsId: 'javahome2', url: 'https://github.com/madu21/myweb.git'
             }
@@ -19,8 +20,7 @@ pipeline{
         stage("deploy-dev"){
             steps{
                deploy adapters: [tomcat9(credentialsId: '116c773b-f827-4ea0-84a5-756bee68171d', path: '', url: 'http://65.0.177.47:8090/')], contextPath: 'myweb', war: 'target/*war'
-               
-   
-            }
-            }
-            }
+                }
+			}
+		}
+	}
