@@ -1,0 +1,35 @@
+pipeline{
+    agent any
+    
+    environment{
+        PATH = "/opt/maven3/bin:$PATH"
+    }
+    stages{
+        stage("Git Checkout"){
+            steps{
+                git credentialsId: 'javahome2', url: 'https://github.com/madu21/myweb.git'
+            }
+        }
+        stage("Maven Build"){
+            steps{
+                sh "mvn clean package"
+                sh "mv target/*.war target/myweb.war"
+            }
+        }
+        stage("deploy-dev"){
+            steps{
+                sshagent(['Tomcat-New34']) {
+                sh """
+                       mv target/myweb.war  /home/ec2-user/apache-tomcat-9.0.56/webapps/
+                    
+                       /home/ec2-user/apache-tomcat-9.0.56/bin/shutdown.sh
+                    
+                       /home/ec2-user/apache-tomcat-9.0.56/bin/startup.sh
+                
+                """
+            }
+            
+            }
+        }
+    }
+}
